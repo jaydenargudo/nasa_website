@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Lock{% endblock title %}
+{% block content %}
+<section>
+    <h1 class="home-font text-center">Modified Medical Inventory System</h1>
+    <br>
+    <br>
+    <div class="d-flex justify-content-center">
+        <video id="video" width="640" height="480" autoplay style="border: 1px solid black;"></video>
+    </div>
+    <br>
+    <div class="d-flex justify-content-center">
+        <button id="start-camera">Start Camera</button>
+        <button id="stop-camera">Stop Camera</button>
+        
+    </div>
+
+
+    
+</section>
+<script>
+    let camera_stream = null;
+    const video = document.getElementById('video');
+
+    // START CAMERA
+    document.getElementById('start-camera').addEventListener('click', async function() {
+        try {
+            camera_stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            video.srcObject = camera_stream;
+        } catch (err) {
+            console.error("Error: ", err);
+        }
+    });
+
+    // STOP CAMERA
+    document.getElementById('stop-camera').addEventListener('click', function() {
+        if (camera_stream) {
+            // Get all tracks (video and audio) and stop them
+            const tracks = camera_stream.getTracks();
+        
+            tracks.forEach(track => track.stop());
+        
+            // Remove the stream from the video element
+            video.srcObject = null;
+            camera_stream = null;
+        }
+    });
+    </script>
+{% endblock %}
